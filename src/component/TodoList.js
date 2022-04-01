@@ -37,7 +37,7 @@ const TodoList = () => {
 
 	const result=todos.map((item)=>{
 		const onToggle = () => {
-			dispatch(todoToggle(item.id, item.todoCheck));
+			dispatch(todoToggle(item.id, item));
 		};
 		
 		const onRemove = () => {

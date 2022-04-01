@@ -9,18 +9,9 @@ export const todoSlice = createSlice ({
             state.push(action.payload.values);
         },
         TODO_TOGGLE:(state,action)=>{
-            console.log(action.payload.values.todoCheck);
-            // const key=action.payload.values.id;
-            // state={...state, todoCheck:!todoCheck};
-            // stateid=action.payload.values.id;
-            // state.todoCheck=action.payload.values.todoCheck;
-            // const count = state.indexOf(1);
-            // console.log(count);
-            // state.map((item)=>item.id === action.payload.values.id ? {...item, todoCheck:action.payload.values.todoCheck} : console.log("못찾음"));
-            // state.todoCheck=action.payload.values.todoCheck;
-            console.log(action.payload.values.id+"번 토글")
-            state.map((item)=>item.id === action.payload.values.id ? { ...item, todoCheck: item.todoCheck } : console.log(item.id));
-            // state.todoCheck = {...state, ["todoCheck"]:action.payload.values.todoCheck};
+            console.log(action.payload.item);
+            const item = action.payload.item;
+            state = {...state, item};
         },
         TODO_REMOVE:(state,action)=>{
 
@@ -39,14 +30,12 @@ export const todoInput=(id,todoWhat)=>(dispatch)=>{
     // const val={values:values};
     // dispatch(TODO_INPUT(val));
 }
-export const todoToggle=(id, todoCheck)=>(dispatch)=>{
-    const values={
-        id:id,
-        todoCheck: !todoCheck,
-    }
-    console.log(values);
-    const val={values:values};
-    dispatch(TODO_TOGGLE(val));
+export const todoToggle=(id, item)=>(dispatch)=>{
+    console.log(id, item);
+    item.todoCheck=!item.todoCheck;
+    console.log(item);
+    const value={item:item};
+    dispatch(TODO_TOGGLE(value));
 }
 export const todoRemove=(value)=>(dispatch)=>{
     const val={value:value};
