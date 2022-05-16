@@ -21,21 +21,21 @@ const rootReducer = combineReducers({
 	todo,
 });
 
-const reducer = (state, action) => {
-	// if(action.type === 'user/LOGOUT') {
-	//     state = undefined; //initialState화
-	// }
-	return rootReducer(state, action);
-};
+// const reducer = (state, action) => {
+// 	// if(action.type === 'user/LOGOUT') {
+// 	//     state = undefined; //initialState화
+// 	// }
+// 	return rootReducer(state, action);
+// };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default configureStore({
 	reducer: persistedReducer,
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
-				ignoredActions: [FLUSH, PAUSE, PERSIST, PURGE, REGISTER],
+				ignoredActions: [FLUSH, REHYDRATE,PAUSE, PERSIST, PURGE, REGISTER],
 			},
 		}),
 });

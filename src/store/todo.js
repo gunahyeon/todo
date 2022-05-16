@@ -1,53 +1,39 @@
-import { ListItemIcon } from "@mui/material";
 import { createSlice } from "@reduxjs/toolkit";
-
 export const todoSlice = createSlice({
 	name: "todo",
 	initialState: {
 		todoList: [],
+		count:0,
 	},
 
 	reducers: {
 		TODO_INPUT: (state, action) => {
-			/*   state.push(action.payload.values); */
-
-			/* state.todoList = state.todoList.push(action.payload); */
 			state.todoList.push(action.payload);
+			state.count = state.count +1;
 		},
 		TODO_TOGGLE: (state, action) => {
-			/* console.log(action.payload.item);
-            const item = action.payload.item;
-            state = {...state, item}; */
+			state.todoList = action.payload;
 		},
-		TODO_REMOVE: (state, action) => {},
+		TODO_REMOVE: (state, action) => {
+			state.todoList = action.payload;
+			state.count = state.count+1;
+		},
 	},
 });
 export const { TODO_INPUT, TODO_TOGGLE, TODO_REMOVE } = todoSlice.actions;
 export const todoInput =
 	({ id, todoWhat }) =>
 	(dispatch) => {
-		/*     const values={
-        id:id+1,
-        todoWhat:todoWhat,
-        todoCheck:false,
-    } */
-		/*  const val={values:values}; */
-
-		const response = { id: id + 1, todoWhat, todoCheck: false };
+		const response = { id: id, todoWhat:todoWhat, todoCheck: false };
 		console.log(response);
 		dispatch(TODO_INPUT(response));
-		// const val={values:values};
-		// dispatch(TODO_INPUT(val));
 	};
-export const todoToggle = (id, item) => (dispatch) => {
-	console.log(id, item);
-	item.todoCheck = !item.todoCheck;
-	console.log(item);
-	const value = { item: item };
-	dispatch(TODO_TOGGLE(value));
+export const todoToggle = (item, id) => (dispatch) => {
+	const response = item.map((todo)=>todo.id == id ? {...todo, todoCheck: !todo.todoCheck}:todo);
+	dispatch(TODO_TOGGLE(response));
 };
-export const todoRemove = (value) => (dispatch) => {
-	const val = { value: value };
-	dispatch(TODO_REMOVE(val));
+export const todoRemove = (item, id) => (dispatch) => {
+	const response = item.filter(todo => todo.id != id);
+	dispatch(TODO_REMOVE(response));
 };
 export default todoSlice.reducer;

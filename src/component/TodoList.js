@@ -4,7 +4,6 @@ import {
 	Box,
 	Typography,
 	Card,
-	CardContent,
 	IconButton,
 	InputBase,
 	Button,
@@ -15,19 +14,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 import { todoInput, todoToggle, todoRemove } from "../store/todo";
 import { useDispatch, useSelector } from "react-redux";
-import { useFormik, Formik } from "formik";
+import { Formik } from "formik";
 const TodoList = () => {
 	const todos = useSelector((state) => state.todo.todoList);
-	/* 	console.log(todos); */
+	const count = useSelector((state) => state.todo.count);
+	console.log(todos,todos.length, count);
 	const dispatch = useDispatch();
-	const formik = useFormik({
-		initialValues: {
-			todoBar: "",
-		},
-		onSubmit: (values) => {
-			dispatch(todoInput(todos.length, values.todoBar));
-		},
-	});
 	const date = (num) => {
 		const day_ko = ["일", "월", "화", "수", "목", "금", "토"];
 		const nowday = day_ko[num];
@@ -37,30 +29,7 @@ const TodoList = () => {
 	React.useEffect(() => {
 		console.log("im rendered");
 	}, []);
-	/* const result = todos.map((item) => {
-		const onToggle = () => {
-			dispatch(todoToggle(item.id, item));
-		};
 
-		const onRemove = () => {
-			dispatch(todoRemove(item.id));
-		};
-
-		return (
-			<Box sx={classes.todo} key={item.id}>
-				<CheckCircleOutlineIcon
-					sx={item.todoCheck ? classes.checkBoxTrue : classes.checkBoxFalse}
-					onClick={onToggle}
-				/>
-				<Typography
-					sx={item.todoCheck ? classes.todoTextTrue : classes.todoTextFalse}
-				>
-					{item.todoWhat}
-				</Typography>
-				<DeleteIcon sx={classes.delete} onClick={onRemove} />
-			</Box>
-		);
-	}); */
 	return (
 		<Box sx={classes.body}>
 			<Card sx={classes.card}>
@@ -74,22 +43,34 @@ const TodoList = () => {
 							"일"}
 					</Box>
 					<Box sx={classes.day}>{date(moment().day())}</Box>
-					{/* <Box sx={classes.todoCount}>
+					<Box sx={classes.todoCount}>
 						{todos.filter((item) => !item.todoCheck).length}개 남음
-					</Box> */}
+					</Box>
 				</Box>
-
+				<Box sx={classes.cardContent}>{
+					todos.map((item) => {
+						return (
+							<Box sx={classes.todo} key={item.id}>
+								<CheckCircleOutlineIcon
+									sx={item.todoCheck ? classes.checkBoxTrue : classes.checkBoxFalse}
+									onClick={()=>{dispatch(todoToggle(todos, item.id))}}
+								/>
+								<Typography
+									sx={item.todoCheck ? classes.todoTextTrue : classes.todoTextFalse}
+								>
+									{item.todoWhat}
+								</Typography>
+								<DeleteIcon sx={classes.delete} onClick={()=>{dispatch(todoRemove(todos, item.id))}} />
+							</Box>
+						);
+					})}</Box>
 				<Formik
 					initialValues={{
 						todoValue: "",
 					}}
 					onSubmit={(data, { resetForm }) => {
-						console.log(data);
-						console.log(todos.length);
-						const test = [];
-						console.log(test.length);
 						const response = {
-							id: todos.length,
+							id: count,
 							todoWhat: data.todoValue,
 						};
 						console.log(response, "test");
